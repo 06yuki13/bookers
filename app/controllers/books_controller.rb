@@ -8,16 +8,44 @@ class BooksController < ApplicationController
     @books=Book.all
   end
 
-  def create
-    book=Book.new(book_params)
-    book.save
-    redirect_to "https://6fead938a662461f86d320d2f7a5071c.vfs.cloud9.us-east-1.amazonaws.com/"
+
+
+def create
+  @book=Book.new(book_params)
+  if @book.save
+    flash[:hoge]="Book was successfully created."
+    redirect_to book_path(@book.id)
+  else
+    @books=Book.all
+    render :index
   end
+end
+
+
 
   def show
+    @book=Book.find(params[:id])
   end
 
   def edit
+    @book=Book.find(params[:id])
+  end
+
+  def update
+    @book=Book.find(params[:id])
+    flash[:hoge] = "Book was successfully created."
+    if @book.update(book_params)
+     redirect_to book_path(@book.id)
+    else
+     render :edit
+    end
+  end
+
+  def destroy
+    book=Book.find(params[:id])
+    flash[:hoge] = "Book was successfully destroyed."
+    book.destroy
+    redirect_to '/books'
   end
 
   private
